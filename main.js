@@ -25,11 +25,6 @@ const game = gameRoom.startGame(humanPlayer);
 
 // Simulate game flow
 game.playGame();
-// game.dealCards();
-// game.bettingRound();
-// game.nextPhase();
-// // ... continue game phases
-// game.endGame();
 
 // Log game history for human player
 console.log(accountManager.getPlayerAccount('Mark').getHistory().map(record => record.toString()));

@@ -53,6 +53,14 @@ export class PlayerAccount {
   }
 
   /**
+   * Returns the player's chip balance
+   * @returns {number}
+   */
+  getChipBalance() {
+    return this.chips;
+  }
+
+  /**
    * Returns the game history.
    * @returns {GameHistory[]}
    */

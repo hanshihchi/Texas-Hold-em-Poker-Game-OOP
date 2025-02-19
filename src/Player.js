@@ -27,6 +27,10 @@ export class Player {
     placeBet(amount) {
       this.chips -= amount;
     }
+
+    fold() {
+        this.folded = true;
+    }
   
     /**
      * Abstract method for making a decision.

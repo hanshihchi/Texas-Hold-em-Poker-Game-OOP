@@ -8,3 +8,16 @@ This project aims to develop a Texas Hold’em Poker Game App where players can 
   - Interface low level mockups:
     
     https://www.figma.com/design/BuQEdCCBBZMbSiKSoTJhWC/Poker-Game?node-id=0-1&t=V18WyP5xhCQdEvtO-1
+
+
+To run the basic example please run
+
+```bash
+npm start
+```
+
+To run the set of tests run
+
+```bash
+npm test
+```

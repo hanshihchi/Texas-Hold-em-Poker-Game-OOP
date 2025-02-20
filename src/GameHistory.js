@@ -5,7 +5,7 @@
 /**
  * Represents a record of a single game's result.
  */
-export class GameHistory {
+export default class GameHistory {
     /**
      * @param {string} gameID - The unique game identifier.
      * @param {string} dateTime - When the game was played.

@@ -5,7 +5,7 @@
 /**
  * Manages a betting round within a game phase.
  */
-export class BettingRound {
+export default class BettingRound {
     constructor() {
       this.currentBet = 0;
       this.playersInRound = [];

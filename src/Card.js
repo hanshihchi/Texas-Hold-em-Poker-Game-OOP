@@ -5,7 +5,7 @@
 /**
  * Represents a playing card.
  */
-export class Card {
+export default class Card {
     /**
      * Creates a new card.
      * @param {string} suit - The suit of the card.

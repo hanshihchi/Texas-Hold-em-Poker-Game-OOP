@@ -1,12 +1,12 @@
 /**
  * @module Leaderboard
  */
-import { AccountManager } from './AccountManager.js'; 
+import AccountManager from './AccountManager.js'; 
 
 /**
  * Aggregates and ranks player accounts by their chip balances.
  */
-export class Leaderboard {
+export default class Leaderboard {
   /**
    * Retrieves and sorts all player accounts from the AccountManager.
    * @returns {Array} An array of PlayerAccount objects sorted in descending order by chip balance.

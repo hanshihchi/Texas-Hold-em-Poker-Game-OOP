@@ -1,16 +1,16 @@
 /**
  * @module GameRoom
  */
-import { PlayerFactory } from './PlayerFactory.js';
-import { Game } from './Game.js';
-import { CautiousBetting } from './CautiousBetting.js';
-import { BalancedBetting } from './BalancedBetting.js';
-import { AggressiveBetting } from './AggressiveBetting.js';
+import PlayerFactory from './PlayerFactory.js';
+import Game from './Game.js';
+import CautiousBetting from './CautiousBetting.js';
+import BalancedBetting from './BalancedBetting.js';
+import AggressiveBetting from './AggressiveBetting.js';
 
 /**
  * Handles pre-game configuration and AI customization.
  */
-export class GameRoom {
+export default class GameRoom {
   constructor() {
     this.numAIPlayers = 0;
     this.aiPlayers = [];

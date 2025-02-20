@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: GameRoom.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: GameRoom.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module GameRoom
+ */
+import PlayerFactory from './PlayerFactory.js';
+import Game from './Game.js';
+import CautiousBetting from './CautiousBetting.js';
+import BalancedBetting from './BalancedBetting.js';
+import AggressiveBetting from './AggressiveBetting.js';
+
+/**
+ * Handles pre-game configuration and AI customization.
+ */
+export default class GameRoom {
+  constructor() {
+    this.numAIPlayers = 0;
+    this.aiPlayers = [];
+    // Default difficulty: "Medium"(BalancedBetting)
+    this.gameDifficulty = 'Medium';
+  }
+
+  /**
+   * Sets the number of AI players and creates them.
+   * @param {number} count
+   */
+  setAIPlayers(count) {
+    this.numAIPlayers = count;
+    this.aiPlayers = [];
+    for (let i = 0; i &lt; count; i++) {
+      let strategy;
+      switch (this.gameDifficulty) {
+        case 'Easy':
+          strategy = new CautiousBetting();
+          break;
+        case 'Hard':
+          strategy = new AggressiveBetting();
+          break;
+        case 'Medium':
+        default:
+          strategy = new BalancedBetting();
+          break;
+      }
+      const aiPlayer = PlayerFactory.createPlayer('computer', `AI_Player_${i + 1}`, strategy);
+      this.aiPlayers.push(aiPlayer);
+    }
+  }
+
+  /**
+   * Modifies the betting strategy for a specific AI player.
+   * @param {number} playerIndex
+   * @param {string} strategyType - e.g., "Easy", "Medium", "Hard"
+   */
+  modifyAIStrategy(playerIndex, strategyType) {
+    let strategy;
+    switch (strategyType) {
+      case 'Easy':
+        strategy = new CautiousBetting();
+        console.log(`${this.aiPlayers[playerIndex].name} is now using CautiousBetting strategy`);
+        break;
+      case 'Hard':
+        strategy = new AggressiveBetting();
+        console.log(`${this.aiPlayers[playerIndex].name} is now using AggressiveBetting strategy`);
+        break;
+      case 'Medium':
+      default:
+        strategy = new BalancedBetting();
+        console.log(`${this.aiPlayers[playerIndex].name} is now using BalancedBetting strategy`);
+        break;
+    }
+    if (this.aiPlayers[playerIndex]) {
+      this.aiPlayers[playerIndex].bettingStrategy = strategy;
+    }
+  }
+
+  /**
+   * Removes an AI player from the game room.
+   * @param {number} playerIndex
+   */
+  removeAIPlayer(playerIndex) {
+    if (playerIndex >= 0 &amp;&amp; playerIndex &lt; this.aiPlayers.length) {
+      this.aiPlayers.splice(playerIndex, 1);
+      this.numAIPlayers = this.aiPlayers.length;
+    }
+  }
+
+  /**
+   * Updates the overall game difficulty and updates existing AI players.
+   * @param {string} difficulty
+   */
+  setGameDifficulty(difficulty) {
+    this.gameDifficulty = difficulty;
+    // Update strategy for all AI players.
+    this.aiPlayers.forEach(player => {
+      this.modifyAIStrategy(this.aiPlayers.indexOf(player), difficulty);
+    });
+  }
+
+  /**
+   * Starts the game by creating a Game instance.
+   * @param {object} humanPlayer - The human player.
+   * @returns {Game} The new game instance.
+   */
+  startGame(humanPlayer) {
+    const allPlayers = [humanPlayer, ...this.aiPlayers];
+    return new Game(allPlayers);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AccountManager.html">AccountManager</a></li><li><a href="module-AggressiveBetting.html">AggressiveBetting</a></li><li><a href="module-BalancedBetting.html">BalancedBetting</a></li><li><a href="module-BettingRound.html">BettingRound</a></li><li><a href="module-BettingStrategy.html">BettingStrategy</a></li><li><a href="module-Card.html">Card</a></li><li><a href="module-CautiousBetting.html">CautiousBetting</a></li><li><a href="module-ComputerPlayer.html">ComputerPlayer</a></li><li><a href="module-Deck.html">Deck</a></li><li><a href="module-Game.html">Game</a></li><li><a href="module-GameHistory.html">GameHistory</a></li><li><a href="module-GameRoom.html">GameRoom</a></li><li><a href="module-GameState.html">GameState</a></li><li><a href="module-HumanPlayer.html">HumanPlayer</a></li><li><a href="module-Leaderboard.html">Leaderboard</a></li><li><a href="module-Player.html">Player</a></li><li><a href="module-PlayerAccount.html">PlayerAccount</a></li><li><a href="module-PlayerFactory.html">PlayerFactory</a></li></ul><h3>Classes</h3><ul><li><a href="module-AccountManager.html">AccountManager</a></li><li><a href="module-AggressiveBetting.html">AggressiveBetting</a></li><li><a href="module-BalancedBetting.html">BalancedBetting</a></li><li><a href="module-BettingRound.html">BettingRound</a></li><li><a href="module-BettingStrategy.html">BettingStrategy</a></li><li><a href="module-Card.html">Card</a></li><li><a href="module-CautiousBetting.html">CautiousBetting</a></li><li><a href="module-ComputerPlayer.html">ComputerPlayer</a></li><li><a href="module-Deck.html">Deck</a></li><li><a href="module-Game.html">Game</a></li><li><a href="module-GameHistory.html">GameHistory</a></li><li><a href="module-GameRoom.html">GameRoom</a></li><li><a href="module-GameState.html">GameState</a></li><li><a href="module-HumanPlayer.html">HumanPlayer</a></li><li><a href="module-Leaderboard.html">Leaderboard</a></li><li><a href="module-Player.html">Player</a></li><li><a href="module-PlayerAccount.html">PlayerAccount</a></li><li><a href="module-PlayerFactory.html">PlayerFactory</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Feb 20 2025 13:56:53 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,14 +1,14 @@
 /**
  * @module PlayerFactory
  */
-import { HumanPlayer } from './HumanPlayer.js';
-import { ComputerPlayer } from './ComputerPlayer.js';
-import { BalancedBetting } from './BalancedBetting.js';
+import HumanPlayer from './HumanPlayer.js';
+import ComputerPlayer from './ComputerPlayer.js';
+import BalancedBetting from './BalancedBetting.js';
 
 /**
  * Factory for creating players.
  */
-export class PlayerFactory {
+export default class PlayerFactory {
   /**
    * Creates a player based on type.
    * @param {string} type - "human" or "computer".

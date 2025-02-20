@@ -6,7 +6,7 @@
  * Abstract class representing a generic player.
  * @abstract
  */
-export class Player {
+export default class Player {
     /**
      * @param {string} name - The player's name.
      */
@@ -28,8 +28,19 @@ export class Player {
       this.chips -= amount;
     }
 
+    /**
+     * Player folds their hand.
+     */
     fold() {
         this.folded = true;
+    }
+
+    /**
+     * Player checks their hand.  
+     * @returns {string} The action 'check'.
+     */
+    check() {
+        return 'check';
     }
   
     /**

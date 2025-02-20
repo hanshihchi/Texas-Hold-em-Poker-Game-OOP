@@ -2,12 +2,12 @@
  * @jest-environment node
  */
 
-import { AccountManager } from '../src/AccountManager.js';
-import { PlayerFactory } from '../src/PlayerFactory.js';
-import { GameRoom } from '../src/GameRoom.js';
-import { Game } from '../src/Game.js';
-import { Leaderboard } from '../src/Leaderboard.js';
-import { GameState } from '../src/GameState.js';
+import AccountManager from '../src/AccountManager.js';
+import PlayerFactory from '../src/PlayerFactory.js';
+import GameRoom from '../src/GameRoom.js';
+import Game from '../src/Game.js';
+import Leaderboard from '../src/Leaderboard.js';
+import GameState from '../src/GameState.js';
 
 describe('AccountManager Tests', () => {
   test('should create and update an account', () => {

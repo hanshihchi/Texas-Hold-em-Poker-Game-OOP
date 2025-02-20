@@ -1,12 +1,11 @@
 /**
  * @module GameState
  */
-import { Game } from './Game.js';
 
 /**
  * Singleton to manage the overall game state.
  */
-export class GameState {
+export default class GameState {
   constructor() {
     if (GameState.instance) {
       return GameState.instance;

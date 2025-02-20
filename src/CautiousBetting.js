@@ -1,13 +1,13 @@
 /**
  * @module CautiousBetting
  */
-import { BettingStrategy } from './BettingStrategy.js';
+import BettingStrategy from './BettingStrategy.js';
 
 /**
  * Represents a cautious betting strategy.
  * @extends BettingStrategy
  */
-export class CautiousBetting extends BettingStrategy {
+export default class CautiousBetting extends BettingStrategy {
   /**
    * Makes a cautious betting decision.
    * An AI decision-maker who isn't willing to take risks.

@@ -1,15 +1,15 @@
 /**
  * @module Game
  */
-import { GameState } from './GameState.js';
-import { Deck } from './Deck.js';
-import { BettingRound } from './BettingRound.js';
-import { AccountManager } from './AccountManager.js';
+import GameState from './GameState.js';
+import Deck from './Deck.js';
+import BettingRound from './BettingRound.js';
+import AccountManager from './AccountManager.js';
 
 /**
  * Manages the overall game flow.
  */
-export class Game {
+export default class Game {
   /**
    * @param {object[]} players - Array of Player instances.
    */

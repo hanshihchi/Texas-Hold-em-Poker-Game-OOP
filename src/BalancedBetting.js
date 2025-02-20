@@ -1,13 +1,13 @@
 /**
  * @module BalancedBetting
  */
-import { BettingStrategy } from './BettingStrategy.js';
+import BettingStrategy from './BettingStrategy.js';
 
 /**
  * Represents a balanced betting strategy.
  * @extends BettingStrategy
  */
-export class BalancedBetting extends BettingStrategy {
+export default class BalancedBetting extends BettingStrategy {
   /**
    * Makes a balanced betting decision.
    * An AI decision-maker who balances risk-taking.

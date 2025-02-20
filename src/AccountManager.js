@@ -1,18 +1,21 @@
 /**
  * @module AccountManager
  */
-import { PlayerAccount } from './PlayerAccount.js';
+import PlayerAccount from './PlayerAccount.js';
 
 /**
  * Manages all human player accounts.
  * @singleton
  */
-export class AccountManager {
+export default class AccountManager {
   constructor() {
     if (AccountManager.instance) {
       return AccountManager.instance;
     }
-    /** @type {{ [playerName: string]: PlayerAccount }} */
+    /**
+     * A collection of player accounts, indexed by player name.
+     * @type {Object.<string, PlayerAccount>}
+     */
     this.accounts = {};
     AccountManager.instance = this;
   }
@@ -30,14 +33,14 @@ export class AccountManager {
 
   /**
    * Creates an account for a new player.
-   * @param {string} playerName
-   * @param {string} email
-   * @param {string} password
-   * @param {string} birthday
-   * @param {number} [initialChips=10000]
+   * @param {string} playerName - The name of the player.
+   * @param {string} email - The player's email address.
+   * @param {string} password - The player's password.
+   * @param {string} birthday - The player's birth date (e.g., "YYYY-MM-DD").
+   * @param {number} [initialChips=10000] - Initial chip balance (optional, defaults to 10000).
+   * @throws {Error} If the player is under 21 years old.
    */
   createAccount(playerName, email, password, birthday, initialChips = 10000) {
-    // Player should be older than 21 to play.
     const today = new Date();
     const birthDate = new Date(birthday);
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -55,8 +58,8 @@ export class AccountManager {
 
   /**
    * Retrieves a player's account.
-   * @param {string} playerName
-   * @returns {PlayerAccount|null}
+   * @param {string} playerName - The name of the player.
+   * @returns {PlayerAccount|null} - The player's account, or null if not found.
    */
   getPlayerAccount(playerName) {
     return this.accounts[playerName] || null;
@@ -64,7 +67,7 @@ export class AccountManager {
 
   /**
    * Updates a player's chip balance.
-   * @param {string} playerName
+   * @param {string} playerName - The name of the player.
    * @param {number} amount - Positive to add, negative to deduct.
    */
   updateChips(playerName, amount) {
@@ -80,11 +83,11 @@ export class AccountManager {
 
   /**
    * Saves a game result for a player.
-   * @param {string} playerName
-   * @param {string} gameID
-   * @param {string} dateTime
-   * @param {number} numPlayers
-   * @param {number} finalWinLoss
+   * @param {string} playerName - The name of the player.
+   * @param {string} gameID - The unique identifier of the game.
+   * @param {string} dateTime - The date and time of the game
+   * @param {number} numPlayers - The total number of players in the game.
+   * @param {number} finalWinLoss - The player's final win/loss amount in chips.
    */
   saveGameResult(playerName, gameID, dateTime, numPlayers, finalWinLoss) {
     const account = this.getPlayerAccount(playerName);

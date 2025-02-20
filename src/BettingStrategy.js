@@ -6,7 +6,7 @@
  * Abstract class representing a betting strategy.
  * @abstract
  */
-export class BettingStrategy {
+export default class BettingStrategy {
     /**
      * Abstract method to make a betting decision.
      * @param {object} gameState - The current game state.

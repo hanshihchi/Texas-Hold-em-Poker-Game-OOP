@@ -46,7 +46,7 @@ It also explains why these implementations are a good application of OOP and des
  * Abstract class representing a generic player.
  * @abstract
  */
-export class Player {
+export default class Player {
   /**
    * Creates a new player.
    * @param {string} name - The player's name.
@@ -72,10 +72,89 @@ export class Player {
   }
 }
 ```
+```javascript
+// src/HumanPlayer.js
+/**
+ * @module HumanPlayer
+ */
+import Player from './Player.js';
+import AccountManager from './AccountManager.js';
 
+/**
+ * Represents a human player.
+ * @extends Player
+ */
+export default class HumanPlayer extends Player {
+  /**
+   * @param {string} name - The player's name.
+   */
+  constructor(name) {
+    super(name);
+    // Link the human player to their persistent account.
+    this.account = AccountManager.getInstance().getPlayerAccount(name);
+  }
+
+  /**
+   * Prompts the human player for an action (abstraction example).
+   * @param {object} gameState - The current game state.
+   * @returns {string} The chosen action.
+   */
+  makeDecision(gameState) {
+    // For demonstration purposes, we'll just return a fixed value.
+    return 'call';
+  }
+}
+
+// src/ComputerPlayer.js
+/**
+ * @module ComputerPlayer
+ */
+import Player from './Player.js';
+
+/**
+ * Represents a computer-controlled player.
+ * @extends Player
+ */
+export default class ComputerPlayer extends Player {
+  /**
+   * @param {string} name - The computer player's name.
+   * @param {object} bettingStrategy - An instance of a BettingStrategy.
+   */
+  constructor(name, bettingStrategy) {
+    super(name);
+    this.bettingStrategy = bettingStrategy;
+  }
+
+  /**
+   * Uses the betting strategy to make a decision (polymorphism example).
+   * @param {object} gameState - The current game state.
+   * @returns {string} The chosen action.
+   */
+  makeDecision(gameState) {
+    return this.bettingStrategy.makeDecision(gameState);
+  }
+}
+```
 **Why It’s Good:**  
-This abstract class hides the implementation details for decision making.  
+This abstract class hides the implementation details for decision making. The Player class provides a high-level interface (properties and the makeDecision method) without revealing how a player’s decision-making process works. 
 **Hypothetical Break:** If all logic were exposed in a concrete class, changes in decision-making would require modifying multiple parts of the code.
+```javascript
+export default class Player {
+  constructor(name) {
+    this.name = name;
+    this.chips = 0; // public property
+    this.hand = [];
+    this.folded = false;
+  }
+  
+  // Decision logic is fully exposed here
+  makeDecision(gameState) {
+    // Complex logic directly implemented
+    if (gameState.phase === 'pre-flop') return 'bet';
+    return 'call';
+  }
+}
+```
 
 ---
 
@@ -88,12 +167,12 @@ This abstract class hides the implementation details for decision making.
 /**
  * @module PlayerAccount
  */
-import { GameHistory } from './GameHistory.js';
+import GameHistory from './GameHistory.js';
 
 /**
  * Stores persistent account data for a human player.
  */
-export class PlayerAccount {
+export default class PlayerAccount {
   /**
    * @param {string} playerName - The player's name.
    * @param {number} [initialChips=1000] - The starting chip balance.
@@ -145,9 +224,20 @@ export class PlayerAccount {
 ```
 
 **Why It’s Good:**  
-Data is modified only through methods, protecting internal state.  
+Data is modified and retrieved only through methods, protecting internal state.  
 **Hypothetical Break:** If properties like `chips` were public and modifiable directly, it could lead to inconsistent state.
+```javascript
+export default class PlayerAccount {
+  constructor(playerName, initialChips = 1000) {
+    this.playerName = playerName;
+    this.chips = initialChips; // Public property
+    this.history = [];
+  }
+}
 
+const account = new PlayerAccount("Alice", 1000);
+account.chips += -1000; // Direct modification, which breaks consistency
+```
 ---
 
 ### 3. Inheritance
@@ -159,14 +249,14 @@ Data is modified only through methods, protecting internal state.
 /**
  * @module HumanPlayer
  */
-import { Player } from './Player.js';
-import { AccountManager } from './AccountManager.js';
+import Player from './Player.js';
+import AccountManager from './AccountManager.js';
 
 /**
  * Represents a human-controlled player.
  * @extends Player
  */
-export class HumanPlayer extends Player {
+export default class HumanPlayer extends Player {
   /**
    * @param {string} name - The player's name.
    */
@@ -192,13 +282,13 @@ export class HumanPlayer extends Player {
 /**
  * @module ComputerPlayer
  */
-import { Player } from './Player.js';
+import Player from './Player.js';
 
 /**
  * Represents a computer-controlled player.
  * @extends Player
  */
-export class ComputerPlayer extends Player {
+export default class ComputerPlayer extends Player {
   /**
    * @param {string} name - The player's name.
    * @param {object} bettingStrategy - An instance of a BettingStrategy.
@@ -222,6 +312,30 @@ export class ComputerPlayer extends Player {
 **Why It’s Good:**  
 Inheritance allows us to reuse common properties and methods from `Player` and specialize behavior in `HumanPlayer` and `ComputerPlayer`.  
 **Hypothetical Break:** Without inheritance, common code would need to be duplicated across different player types, increasing maintenance.
+```javascript
+export default class HumanPlayer {
+  constructor(name) {
+    this.name = name;
+    this.chips = 0;
+    // duplicate hand, folded properties...
+  }
+  makeDecision(gameState) {
+    // logic...
+  }
+}
+
+export default class ComputerPlayer {
+  constructor(name, bettingStrategy) {
+    this.name = name;
+    this.chips = 0;
+    // duplicate hand, folded properties...
+    this.bettingStrategy = bettingStrategy;
+  }
+  makeDecision(gameState) {
+    // similar logic but repeated.
+  }
+}
+```
 
 ---
 
@@ -239,7 +353,7 @@ Inheritance allows us to reuse common properties and methods from `Player` and s
  * Abstract class for betting strategies.
  * @abstract
  */
-export class BettingStrategy {
+export default class BettingStrategy {
   /**
    * Makes a betting decision.
    * @param {object} gameState - The current game state.
@@ -257,13 +371,13 @@ export class BettingStrategy {
 /**
  * @module BalancedBetting
  */
-import { BettingStrategy } from './BettingStrategy.js';
+import BettingStrategy from './BettingStrategy.js';
 
 /**
  * Implements a balanced betting strategy.
  * @extends BettingStrategy
  */
-export class BalancedBetting extends BettingStrategy {
+export default class BalancedBetting extends BettingStrategy {
   constructor() {
     super();
     this.difficulty = 'Medium';
@@ -277,6 +391,19 @@ export class BalancedBetting extends BettingStrategy {
 **Why It’s Good:**  
 `ComputerPlayer` uses any instance of a subclass of `BettingStrategy` to decide its action, allowing dynamic behavior changes at runtime.  
 **Hypothetical Break:** If betting logic were hard-coded into `ComputerPlayer`, the system would lose flexibility.
+```javascript
+export class ComputerPlayer {
+  constructor(name) {
+    this.name = name;
+    this.chips = 0;
+  }
+  
+  // Hard-coded decision logic; cannot change dynamically.
+  makeDecision(gameState) {
+    return 'call';
+  }
+}
+```
 
 ---
 
@@ -288,12 +415,12 @@ export class BalancedBetting extends BettingStrategy {
 
 ```javascript
 // src/Deck.js
-import { Card } from './Card.js';
+import Card from './Card.js';
 
 /**
  * Represents a deck of playing cards.
  */
-export class Deck {
+export default class Deck {
   constructor() {
     this.cards = [];
     const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
@@ -316,7 +443,21 @@ export class Deck {
 
 **Why It’s Good:**  
 `Deck` is responsible solely for managing cards.  
-**Hypothetical Break:** Combining deck management with game logic would violate SRP by mixing distinct responsibilities.
+**Hypothetical Break:** Combining deck management with game logic would violate SRP by mixing distinct responsibilities.A single class that manages cards, game logic and elements.
+```javascript
+export class GameManager {
+  constructor() {
+    this.gameID = Math.floor(Math.random() * 1000); // game ID
+    this.players = players;
+    this.cards = []; // card management
+    this.communityCards = [];
+    this.pot = 0;
+    this.currentDealer = null;
+    this.gamePhase = 'pre-flop';
+  }
+  // Methods for card management, game logic, and players control all mixed together.
+}
+```
 
 ---
 
@@ -326,13 +467,13 @@ export class Deck {
 
 ```javascript
 // src/UltraAggressiveBetting.js
-import { BettingStrategy } from './BettingStrategy.js';
+import BettingStrategy from './BettingStrategy.js';
 
 /**
  * Represents an ultra-aggressive betting strategy.
  * @extends BettingStrategy
  */
-export class UltraAggressiveBetting extends BettingStrategy {
+export default class UltraAggressiveBetting extends BettingStrategy {
   constructor() {
     super();
     this.difficulty = 'Ultra Hard';
@@ -346,6 +487,19 @@ export class UltraAggressiveBetting extends BettingStrategy {
 **Why It’s Good:**  
 We can add new strategies without modifying existing classes like `ComputerPlayer`.  
 **Hypothetical Break:** Hard-coding new strategies into `ComputerPlayer` would require modifying the class each time, violating OCP.
+```javascript
+export class ComputerPlayer extends Player {
+  constructor(name) {
+    super(name);
+  }
+  makeDecision(gameState) {
+    // To add a new behavior, we would have to modify this method directly.
+    if (gameState.phase === 'pre-flop') return 'raise';
+    else if (gameState.phase === 'flop') return 'all-in'; // new behavior hard-coded.
+    return 'call';
+  }
+}
+```
 
 ---
 
@@ -367,6 +521,18 @@ players.forEach(player => {
 **Why It’s Good:**  
 Both `HumanPlayer` and `ComputerPlayer` behave as expected when used as `Player`.  
 **Hypothetical Break:** A subclass that doesn't conform to `Player`'s expected behavior would break substitution and lead to errors.
+```javascript
+export class FaultyPlayer extends Player {
+  constructor(name) {
+    super(name);
+  }
+  makeDecision(gameState) {
+    // Instead of returning a valid action, it always throws an error.
+    throw new Error('Faulty decision logic');
+  }
+}
+// Using FaultyPlayer in place of Player would break game flow.
+```
 
 ---
 
@@ -374,10 +540,97 @@ Both `HumanPlayer` and `ComputerPlayer` behave as expected when used as `Player`
 
 **Example:**  
 Abstract classes like `Player` and `BettingStrategy` define only the necessary methods. This ensures that subclasses implement only what they need.
+```javascript
+// src/Player.js 
+export default class Player {
+    /**
+     * @param {string} name - The player's name.
+     */
+    constructor(name) {
+      if (new.target === Player) {
+        throw new TypeError('Cannot construct Player instances directly');
+      }
+      this.name = name;
+      this.chips = 0;
+      this.hand = [];
+      this.folded = false;
+    }
+  
+    /**
+     * Deducts chips for a bet.
+     * @param {number} amount - The bet amount.
+     */
+    placeBet(amount) {
+      this.chips -= amount;
+    }
+
+    fold() {
+        this.folded = true;
+    }
+  
+    /**
+     * Abstract method for making a decision.
+     * @abstract
+     * @param {object} gameState - The current game state.
+     * @returns {string} The chosen action.
+     */
+    makeDecision(gameState) {
+      throw new Error('makeDecision() must be implemented by subclasses');
+    }
+  }
+```
 
 **Why It’s Good:**  
 Clients rely on minimal, specific interfaces.  
 **Hypothetical Break:** Forcing a class to implement methods it doesn't require would create unnecessary dependencies.
+```javascript
+export default class Player {
+    /**
+     * Abstract method for making a decision.
+     * @abstract
+     * @param {object} gameState - The current game state.
+     * @returns {string} The chosen action.
+     */
+    makeDecision(gameState) {
+      throw new Error('makeDecision() must be implemented by subclasses');
+    }
+  
+    /**
+     * Abstract method for chatting with other players (e.g., in an online game).
+     * @abstract
+     * @param {string} message - The chat message.
+     */
+    sendChatMessage(message) {
+      throw new Error('sendChatMessage() must be implemented by subclasses');
+    }
+}
+
+export default class ComputerPlayer extends Player {
+  /**
+   * @param {string} name - The computer player's name.
+   * @param {object} bettingStrategy - An instance of a BettingStrategy.
+   */
+  constructor(name, bettingStrategy) {
+    super(name);
+    this.bettingStrategy = bettingStrategy;
+  }
+
+  /**
+   * Uses the betting strategy to make a decision (polymorphism example).
+   * @param {object} gameState - The current game state.
+   * @returns {string} The chosen action.
+   */
+  makeDecision(gameState) {
+    return this.bettingStrategy.makeDecision(gameState);
+  }
+
+  // Forced to implement irrelevant methods
+  sendChatMessage(message) {
+    // AI doesn't chat, but must implement it
+    return;
+  }
+}
+```
 
 ---
 
@@ -387,8 +640,8 @@ Clients rely on minimal, specific interfaces.
 
 ```javascript
 // src/ComputerPlayer.js
-import { Player } from './Player.js';
-export class ComputerPlayer extends Player {
+import Player from './Player.js';
+export default class ComputerPlayer extends Player {
   constructor(name, bettingStrategy) {
     super(name);
     // Depends on the abstraction BettingStrategy rather than a concrete class.
@@ -403,6 +656,18 @@ export class ComputerPlayer extends Player {
 **Why It’s Good:**  
 High-level modules depend on abstractions, making the system more flexible and decoupled.  
 **Hypothetical Break:** Direct instantiation of a concrete strategy in `ComputerPlayer` would tightly couple the class, making it hard to extend.
+```javascript
+export class BadComputerPlayer extends Player {
+  constructor(name) {
+    super(name);
+    // Direct instantiation couples the class to a concrete strategy.
+    this.bettingStrategy = new AggressiveBetting();
+  }
+  makeDecision(gameState) {
+    return this.bettingStrategy.makeDecision(gameState);
+  }
+}
+```
 
 ---
 
@@ -414,13 +679,13 @@ High-level modules depend on abstractions, making the system more flexible and d
 
 ```javascript
 // src/AccountManager.js
-import { PlayerAccount } from './PlayerAccount.js';
+import PlayerAccount from './PlayerAccount.js';
 
 /**
  * Manages all human player accounts.
  * @singleton
  */
-export class AccountManager {
+export default class AccountManager {
   constructor() {
     if (AccountManager.instance) {
       return AccountManager.instance;
@@ -473,6 +738,18 @@ export class AccountManager {
 **Why It’s Good:**  
 Singleton ensures a single instance manages all accounts, preventing data inconsistency.  
 **Hypothetical Break:** Multiple instances would lead to fragmented account data.
+```javascript
+export class BadAccountManager {
+  constructor() {
+    this.accounts = {};
+  }
+  // No singleton mechanism; multiple instances can be created.
+}
+const mgr1 = new BadAccountManager();
+const mgr2 = new BadAccountManager();
+mgr1.accounts['Alice'] = { chips: 1000 };
+mgr2.accounts['Alice'] = { chips: 500 };
+```
 
 ---
 
@@ -482,14 +759,14 @@ Singleton ensures a single instance manages all accounts, preventing data incons
 
 ```javascript
 // src/PlayerFactory.js
-import { HumanPlayer } from './HumanPlayer.js';
-import { ComputerPlayer } from './ComputerPlayer.js';
-import { BalancedBetting } from './BalancedBetting.js';
+import HumanPlayer from './HumanPlayer.js';
+import ComputerPlayer from './ComputerPlayer.js';
+import BalancedBetting from './BalancedBetting.js';
 
 /**
  * Factory for creating player instances.
  */
-export class PlayerFactory {
+export default class PlayerFactory {
   /**
    * Creates a new player.
    * @param {string} type - "human" or "computer".
@@ -511,6 +788,13 @@ export class PlayerFactory {
 **Why It’s Good:**  
 Centralizes object creation logic, making the code easier to maintain and extend.  
 **Hypothetical Break:** Scattered instantiation logic would lead to duplicated code and errors.
+```javascript
+const player1 = new HumanPlayer('Alice');
+const player2 = new ComputerPlayer('Bot1', new BalancedBetting());
+// Later in another module:
+const player3 = new HumanPlayer('Bob');
+// If the creation logic changes, you must update every instantiation.
+```
 
 ---
 
@@ -524,7 +808,7 @@ Centralizes object creation logic, making the code easier to maintain and extend
  * Abstract class for betting strategies.
  * @abstract
  */
-export class BettingStrategy {
+export default class BettingStrategy {
   /**
    * Makes a betting decision.
    * @param {object} gameState - The current game state.
@@ -539,13 +823,13 @@ export class BettingStrategy {
 
 ```javascript
 // src/BalancedBetting.js
-import { BettingStrategy } from './BettingStrategy.js';
+import BettingStrategy from './BettingStrategy.js';
 
 /**
  * Implements a balanced betting strategy.
  * @extends BettingStrategy
  */
-export class BalancedBetting extends BettingStrategy {
+export default class BalancedBetting extends BettingStrategy {
   constructor() {
     super();
     this.difficulty = 'Medium';
@@ -559,5 +843,16 @@ export class BalancedBetting extends BettingStrategy {
 **Why It’s Good:**  
 Allows computer players to switch strategies at runtime without changing their implementation.  
 **Hypothetical Break:** Hard-coding betting logic in `ComputerPlayer` would eliminate flexibility.
+```javascript
+export class ComputerPlayer extends Player {
+  constructor(name) {
+    super(name);
+  }
+  makeDecision(gameState) {
+    // No strategy pattern used; decision is hard-coded.
+    return 'call';
+  }
+}
+```
 
 *End of Document*

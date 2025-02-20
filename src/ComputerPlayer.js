@@ -1,13 +1,13 @@
 /**
  * @module ComputerPlayer
  */
-import { Player } from './Player.js';
+import Player from './Player.js';
 
 /**
  * Represents a computer-controlled player.
  * @extends Player
  */
-export class ComputerPlayer extends Player {
+export default class ComputerPlayer extends Player {
   /**
    * @param {string} name - The computer player's name.
    * @param {object} bettingStrategy - An instance of a BettingStrategy.

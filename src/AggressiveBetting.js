@@ -1,13 +1,13 @@
 /**
  * @module AggressiveBetting
  */
-import { BettingStrategy } from './BettingStrategy.js';
+import BettingStrategy from './BettingStrategy.js';
 
 /**
  * Represents an aggressive betting strategy.
  * @extends BettingStrategy
  */
-export class AggressiveBetting extends BettingStrategy {
+export default class AggressiveBetting extends BettingStrategy {
   /**
    * Makes an aggressive betting decision.
    * An AI decision-maker willing to take risks

@@ -1,12 +1,12 @@
 /**
  * @module PlayerAccount
  */
-import { GameHistory } from './GameHistory.js';
+import GameHistory from './GameHistory.js';
 
 /**
  * Stores persistent account data for a human player.
  */
-export class PlayerAccount {
+export default class PlayerAccount {
   /**
    * @param {string} playerName - The player's name.
    * @param {string} email - The player's email.

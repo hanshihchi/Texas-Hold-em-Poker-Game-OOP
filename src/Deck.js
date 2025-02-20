@@ -1,12 +1,12 @@
 /**
  * @module Deck
  */
-import { Card } from './Card.js';
+import Card from './Card.js';
 
 /**
  * Represents a deck of 52 playing cards.
  */
-export class Deck {
+export default class Deck {
   constructor() {
     this.cards = [];
     const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];

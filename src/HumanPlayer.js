@@ -1,14 +1,14 @@
 /**
  * @module HumanPlayer
  */
-import { Player } from './Player.js';
-import { AccountManager } from './AccountManager.js';
+import Player from './Player.js';
+import AccountManager from './AccountManager.js';
 
 /**
  * Represents a human player.
  * @extends Player
  */
-export class HumanPlayer extends Player {
+export default class HumanPlayer extends Player {
   /**
    * @param {string} name - The player's name.
    */

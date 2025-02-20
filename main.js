@@ -1,10 +1,10 @@
 /**
  * @module index
  */
-import { AccountManager } from './src/AccountManager.js';
-import { PlayerFactory } from './src/PlayerFactory.js';
-import { GameRoom } from './src/GameRoom.js';
-import { Leaderboard } from './src/Leaderboard.js';
+import AccountManager from './src/AccountManager.js';
+import PlayerFactory from './src/PlayerFactory.js';
+import GameRoom from './src/GameRoom.js';
+import Leaderboard from './src/Leaderboard.js';
 
 // Create account for a User
 const accountManager = AccountManager.getInstance();
